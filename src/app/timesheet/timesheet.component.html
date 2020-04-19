@@ -1,0 +1,72 @@
+<input class="browserFile" type="file" #csvReader name="Upload CSV" id="txtFileUpload" (change)="uploadListener($event)" accept=".csv" />
+<button type="button" class="btn btn-primary" (click)="newItem()"><i class="fa fa-plus"></i> {{' Adiciona Registo'}}</button>
+<button type="button" class="btn btn-primary" (click)="saveCsv()"><i class="fa fa-save"></i> {{' Salvar Registo'}}</button>
+<table class="table table-striped table-responsive" #timesheettable>
+  <thead>
+    <tr>
+      <th>Descricao</th>
+      <th>Data</th>
+      <th>Hora de Inicio</th>
+      <th>Hora de fim</th>
+      <th>Total de horas</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of events; let i = index">
+      <tr>
+
+        <td style="vertical-align:middle">
+          <input type="text" [(ngModel)]="events[i].text">
+        </td>
+
+        <td style="vertical-align:middle">
+          <input class="align-left" placeholder="item.dateFormat"
+                 (ngModel)="toDateModel($event,i)"
+                 [ngModel]="item.dateFormat"
+                 (click)="d1.toggle()"
+                 id="date{{events[i].id}}" name="date{{events[i].id}}" ngbDatepicker #d1="ngbDatepicker" [startDate]="startDate" [minDate]="minDate" [maxDate]="maxDate">
+          <div class="align-right">
+            <button class="btn btn-outline-secondary fa fa-calendar" (click)="d1.toggle()" type="button"></button>
+          </div>
+        </td>
+
+
+
+        <!--<td>{{item.date | date:'dd/MM/yyyy'}}</td>-->
+        <td>
+          <ngb-timepicker placeholder="item.timeStartFormat" (ngModel)="toTimeStartModel($event,i)"
+                          [size]="'small'" [ngModel]="item.timeStartFormat" [meridian]="false"></ngb-timepicker>
+        </td>
+
+
+
+        <!--<td>{{item.start | date:'HH:mm:ss'}}</td>-->
+
+        <td>
+          <ngb-timepicker placeholder="item.timeEndFormat" (ngModel)="toTimeEndModel($event,i)"
+                          [size]="'small'" [ngModel]="item.timeEndFormat" [meridian]="false"></ngb-timepicker>
+        </td>
+        <!--<td *ngIf="item.end !== null">{{item.end | date:'HH:mm:ss'}}</td>-->
+        <!--<td *ngIf="item.end === null">{{0}}</td>-->
+        <td style="vertical-align:middle">{{item.totalHours }}</td>
+
+        <td style="vertical-align:middle">
+          <button type="button" class="btn btn-success"
+                  [ngClass]="{'btn-success': item.end === null, 'btn-danger':  item.end !== null }"
+                  (click)="CheckTime(item)">
+            <i class="fa fa-check"></i>{{' Check Out'}}
+          </button>
+        </td>
+        <td style="vertical-align:middle">
+          <button type="button" class="btn btn-success" (click)="Delete(item)">
+            <i class="fa fa-trash-o"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+
